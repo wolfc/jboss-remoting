@@ -22,15 +22,16 @@
 
 package org.jboss.remoting3.spi;
 
-import java.io.Closeable;
-import java.io.IOException;
-import java.util.Arrays;
+import org.jboss.logging.Logger;
 import org.jboss.remoting3.Channel;
 import org.jboss.remoting3.CloseHandler;
 import org.jboss.remoting3.HandleableCloseable;
 import org.jboss.remoting3.OpenListener;
 import org.xnio.IoUtils;
-import org.jboss.logging.Logger;
+
+import java.io.Closeable;
+import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Utility methods for Remoting service providers.
@@ -95,7 +96,7 @@ public final class SpiUtils {
      */
     public static void glueStackTraces(final Throwable exception, final StackTraceElement[] userStackTrace, final int trimCount, final String msg) {
         final StackTraceElement[] est = exception.getStackTrace();
-        final StackTraceElement[] fst = Arrays.copyOf(est, est.length + userStackTrace.length);
+        final StackTraceElement[] fst = Arrays.copyOf(est, est.length + userStackTrace.length - trimCount + 1);
         fst[est.length] = new StackTraceElement("..." + msg + "..", "", null, -1);
         System.arraycopy(userStackTrace, trimCount, fst, est.length + 1, userStackTrace.length - trimCount);
         exception.setStackTrace(fst);
